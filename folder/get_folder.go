@@ -55,8 +55,9 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 			childFolders = append(childFolders, folder)
 		}
 	}
+	// Return empty folder if there are no child folders
 	if len(childFolders) == 0 {
-		return []Folder{}, nil // This is optional, but you can return an empty slice
+		return []Folder{}, nil
 	}
 
 	return childFolders, nil
