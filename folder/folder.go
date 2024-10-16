@@ -22,12 +22,18 @@ type driver struct {
 	// or preprocessed data
 
 	// example: feel free to change the data structure, if slice is not what you want
-	folders []Folder
+	folders   []Folder
+	folderMap map[string]Folder
 }
 
 func NewDriver(folders []Folder) IDriver {
+	folderMap := make(map[string]Folder)
+	for _, folder := range folders {
+		folderMap[folder.Name+folder.OrgId.String()] = folder
+	}
+
 	return &driver{
-		// initialize attributes here
-		folders: folders,
+		folders:   folders,
+		folderMap: folderMap, // Initialize the map
 	}
 }
