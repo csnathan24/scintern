@@ -10,7 +10,7 @@ import (
 
 // Use uuid instead of "org1" for integrity
 func Test_folder_MoveFolder(t *testing.T) {
-	tests := []struct {
+	testCases := []struct {
 		name    string
 		folders []folder.Folder
 		move    string
@@ -145,18 +145,18 @@ func Test_folder_MoveFolder(t *testing.T) {
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			f := folder.NewDriver(tt.folders)
-			got, err := f.MoveFolder(tt.move, tt.dst)
+	for _, test := range testCases {
+		t.Run(test.name, func(t *testing.T) {
+			driver := folder.NewDriver(test.folders)
+			result, error := driver.MoveFolder(test.move, test.dst)
 
-			if tt.errMsg != "" {
-				assert.EqualError(t, err, tt.errMsg)
+			if test.errMsg != "" {
+				assert.EqualError(t, error, test.errMsg)
 				return
 			} else {
-				assert.NoError(t, err)
+				assert.NoError(t, error)
 			}
-			assert.ElementsMatch(t, tt.want, got)
+			assert.ElementsMatch(t, test.want, result)
 		})
 	}
 }
