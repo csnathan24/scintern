@@ -34,15 +34,9 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 		return []Folder{}, fmt.Errorf("invalid name: folder name cannot be empty")
 	}
 
-	// Map for efficient lookup of folders
-	folderMap := make(map[string]Folder)
-	for _, folder := range f.folders {
-		folderMap[folder.Name+folder.OrgId.String()] = folder
-	}
-
-	// Finding parent folder
+	// Finding parent folder using the precomputed map in folder.go
 	parentKey := name + orgID.String()
-	parentFolder, exists := folderMap[parentKey]
+	parentFolder, exists := f.folderMap[parentKey]
 	if !exists {
 		return []Folder{}, fmt.Errorf("folder '%s' does not exist in the specified organization", name)
 	}
@@ -55,6 +49,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 			childFolders = append(childFolders, folder)
 		}
 	}
+
 	// Return empty folder if there are no child folders
 	if len(childFolders) == 0 {
 		return []Folder{}, nil
