@@ -48,7 +48,7 @@ func Test_folder_GetAllChildFolders_InvalidNames(t *testing.T) {
 	}
 }
 
-// invalid name input
+// Invalid name input
 func Test_folder_GetAllChildFolders_ExistingNames(t *testing.T) {
 	testsCases := []struct {
 		name    string
