@@ -5,20 +5,8 @@ import (
 
 	"github.com/georgechieng-sc/interns-2022/folder"
 	"github.com/gofrs/uuid"
+	"github.com/stretchr/testify/assert"
 )
-
-// Helper function to compare two slices of Folder
-func equalsFolders(a, b []folder.Folder) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
-}
 
 // Use uuid instead of "org1" for integrity
 func Test_folder_MoveFolder(t *testing.T) {
@@ -162,18 +150,13 @@ func Test_folder_MoveFolder(t *testing.T) {
 			f := folder.NewDriver(tt.folders)
 			got, err := f.MoveFolder(tt.move, tt.dst)
 
-			// Check for errors
-			if err != nil {
-				if err.Error() != tt.errMsg {
-					t.Errorf("expected error %v, got %v", tt.errMsg, err.Error())
-				}
+			if tt.errMsg != "" {
+				assert.EqualError(t, err, tt.errMsg)
 				return
+			} else {
+				assert.NoError(t, err)
 			}
-
-			// Check if the results match the expected output
-			if !equalsFolders(got, tt.want) {
-				t.Errorf("MoveFolder() = %v, want %v", got, tt.want)
-			}
+			assert.ElementsMatch(t, tt.want, got)
 		})
 	}
 }
