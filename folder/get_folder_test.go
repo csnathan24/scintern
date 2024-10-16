@@ -5,6 +5,7 @@ import (
 
 	"github.com/georgechieng-sc/interns-2022/folder"
 	"github.com/gofrs/uuid"
+	"github.com/stretchr/testify/assert"
 )
 
 // Tests are structured based off name inputs
@@ -42,9 +43,7 @@ func Test_folder_GetAllChildFolders_InvalidNames(t *testing.T) {
 				return
 			}
 
-			if !equal(result, tests.want) {
-				t.Errorf("GetAllChildFolders() = %v, want %v", result, tests.want)
-			}
+			assert.Equal(t, tests.want, result)
 		})
 	}
 }
@@ -76,15 +75,11 @@ func Test_folder_GetAllChildFolders_ExistingNames(t *testing.T) {
 			result, error := driver.GetAllChildFolders(tests.orgID, "non_existent_folder")
 
 			if error != nil {
-				if error.Error() != tests.errMsg {
-					t.Errorf("expected error %v, got %v", tests.errMsg, error.Error())
-				}
+				assert.EqualError(t, error, tests.errMsg)
 				return
 			}
 
-			if !equal(result, tests.want) {
-				t.Errorf("GetAllChildFolders() = %v, want %v", result, tests.want)
-			}
+			assert.Equal(t, tests.want, result)
 		})
 	}
 }
@@ -177,28 +172,11 @@ func Test_folder_GetAllChildFolders_Valid(t *testing.T) {
 			result, error := driver.GetAllChildFolders(tests.orgID, "alpha")
 
 			if error != nil {
-				if error.Error() != tests.errMsg {
-					t.Errorf("expected error %v, got %v", tests.errMsg, error.Error())
-				}
+				assert.EqualError(t, error, tests.errMsg)
 				return
 			}
 
-			if !equal(result, tests.want) {
-				t.Errorf("GetAllChildFolders() = %v, want %v", result, tests.want)
-			}
+			assert.Equal(t, tests.want, result)
 		})
 	}
-}
-
-// Helper function to compare two slices of Folder
-func equal(a, b []folder.Folder) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
 }
