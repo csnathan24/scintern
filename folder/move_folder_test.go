@@ -71,6 +71,20 @@ func Test_folder_MoveFolder(t *testing.T) {
 			errMsg: "cannot move a folder to a child of itself",
 		},
 		{
+			name: "Move root folder to a new destination",
+			folders: []folder.Folder{
+				{Name: "alpha", Paths: "alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "bravo", Paths: "bravo", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+			},
+			move: "alpha",
+			dst:  "bravo",
+			want: []folder.Folder{
+				{Name: "alpha", Paths: "bravo.alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "bravo", Paths: "bravo", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+			},
+			errMsg: "",
+		},
+		{
 			name: "valid example 1 from readme.md",
 			folders: []folder.Folder{
 				{Name: "alpha", Paths: "alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
