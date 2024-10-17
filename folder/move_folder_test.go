@@ -85,6 +85,22 @@ func Test_folder_MoveFolder(t *testing.T) {
 			errMsg: "",
 		},
 		{
+			name: "Move folder to a sibling",
+			folders: []folder.Folder{
+				{Name: "alpha", Paths: "alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "bravo", Paths: "alpha.bravo", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "charlie", Paths: "alpha.charlie", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+			},
+			move: "bravo",
+			dst:  "charlie",
+			want: []folder.Folder{
+				{Name: "alpha", Paths: "alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "bravo", Paths: "alpha.charlie.bravo", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+				{Name: "charlie", Paths: "alpha.charlie", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
+			},
+			errMsg: "",
+		},
+		{
 			name: "valid example 1 from readme.md",
 			folders: []folder.Folder{
 				{Name: "alpha", Paths: "alpha", OrgId: uuid.FromStringOrNil("a1234567-b7c0-45a3-a6ae-9546248fb17a")},
