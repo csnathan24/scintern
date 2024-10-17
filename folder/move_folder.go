@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+// A method to move a subtree from one parent node to another, while maintaining the order of the children.
+// The method should return the new folder structure once the move has occurred.
+// Implement any necessary error handling (e.g. invalid paths, moving a node to a child of itself, moving folders to a different orgID, etc).
+// There is no need to persist state, we can assume each method call will be independent of the previous one
 func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	// Check if the source folder exists
 	var sourceFolder *Folder
@@ -19,9 +23,9 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 
 	// Check if the destination folder exists
 	var destFolder *Folder
-	for _, folder := range f.folders {
+	for i, folder := range f.folders {
 		if folder.Name == dst {
-			destFolder = &folder
+			destFolder = &f.folders[i]
 			break
 		}
 	}
@@ -47,22 +51,30 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 	// Hold the original path before changing it
 	originalPath := sourceFolder.Paths
 
+	// Create a new slice to hold the updated folder structure - for requirement 4
+	newFolders := make([]Folder, len(f.folders))
+	copy(newFolders, f.folders) // Copy the original folder structure
+
 	// Create the new path for the source folder
 	newPath := destFolder.Paths + "." + sourceFolder.Name
 
-	// Move the source folder
-	sourceFolder.Paths = newPath
-
-	// Move all children (if any)
-	for i := range f.folders {
-		if isChildFolder(f.folders[i].Paths, originalPath) {
-			// Create the new relative path for the child folder
-			childRelativePath := f.folders[i].Paths[len(originalPath):]
-
-			// Set the new path for the child folder
-			f.folders[i].Paths = newPath + childRelativePath
+	// Move the source folder in the new structure
+	for i := range newFolders {
+		if newFolders[i].Name == sourceFolder.Name {
+			newFolders[i].Paths = newPath
+			break
 		}
 	}
 
-	return f.folders, nil
+	// Move all children (if any) in the new structure
+	for i := range newFolders {
+		if isChildFolder(newFolders[i].Paths, originalPath) {
+			// Create the new relative path for the child folder
+			childRelativePath := newFolders[i].Paths[len(originalPath):]
+			// Set the new path for the child folder
+			newFolders[i].Paths = newPath + childRelativePath
+		}
+	}
+
+	return newFolders, nil // Return the new folder structure
 }
