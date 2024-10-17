@@ -15,19 +15,17 @@ func (f *driver) MoveFolder(name string, dst string) ([]Folder, error) {
 		folderMap[f.folders[i].Name] = &f.folders[i]
 	}
 
-	// Check if the source folder exists
+	// Check if the source/ dest folder exists and if source = destination
 	sourceFolder, exists := folderMap[name]
 	if !exists {
 		return nil, fmt.Errorf("source folder '%s' does not exist", name)
 	}
 
-	// Check if the destination folder exists
 	destFolder, exists := folderMap[dst]
 	if !exists {
 		return nil, fmt.Errorf("destination folder '%s' does not exist", dst)
 	}
 
-	// Check if the source and destination are the same
 	if name == dst {
 		return nil, fmt.Errorf("cannot move a folder to itself")
 	}
