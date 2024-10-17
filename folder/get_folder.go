@@ -19,9 +19,7 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 			res = append(res, f)
 		}
 	}
-
 	return res
-
 }
 
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, error) {
