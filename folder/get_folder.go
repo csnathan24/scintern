@@ -22,6 +22,9 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 	return res
 }
 
+// A method to get all child folders of a given folder.
+// The method should return a list of all child folders.
+// Implement any necessary error handling (e.g. invalid orgID, invalid paths, etc).
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, error) {
 
 	// Safe practice input validation
